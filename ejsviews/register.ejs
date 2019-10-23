@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<title>国安永远争第一</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- font files  -->
+<link href='http://fonts.useso.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+<!-- /font files  -->
+<!-- css files -->
+<link href="../public/style/style.css" rel='stylesheet' type='text/css' media="all" />
+<!-- /css files -->
+
+<script type="text/javascript" src="../public/js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<h1>国安球迷社区</h1>
+<div class="log">
+	<div class="content1">
+		<img src="public/images/1.jpg"/>
+	</div>
+	<div class="content2">
+		<h2>注册</h2>
+		<form>
+			<input type="email" name="userEmail" id="email_r" class="ipt" placeholder="邮箱地址" autocomplete="off"/>
+			<span id="showMsg" style="font-size: 14px;color: red; font-weight: bolder;"></span>
+			<input type="text" name="userName" id="user" class="ipt" placeholder="输入用户名" autocomplete="off"/>
+			<input type="password" name="userPwd" id="password" class="ipt" placeholder="设置登录密码" autocomplete="off"/>
+			<input type="password" name="password1" id="password1" class="ipt" placeholder="再次输入密码" autocomplete="off"/>
+			<input type="submit" class="register" value="注册">
+			<span id="errMsg" style="font-size: 14px;color: red; font-weight: bolder;"></span>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="footer">
+	<p>Copyright &copy; 2019.Company name All rights reserved.<a target="_blank" href="#">梁佳跃;</a></p>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		//找到输入邮箱的框,给其添加一个失去焦点的事件,如果事件发生,表明可以获取用户输入的邮箱信息
+		$('#email_r').blur(function(){
+			var email = $('#email_r').val()
+			if(email===''){
+				$('#showMsg').text('邮箱不能为空');
+			}else{
+					//发送邮箱数据
+					$.post('/checkEmail' ,{userEmail:email}, function(data){
+							$('#showMsg').text('');
+							$('#showMsg').text(data.msg);
+					})
+			}
+		})
+		
+		//找到注册按钮,绑定单击事件
+		$('.register').click(function(){
+			var userEmail = $('#email_r').val()
+			var userName = $('#user').val()
+			var userPwd = $('#password').val()
+			console.log(userEmail,userName,userPwd);
+			$.post('/regist',{
+								email:userEmail,
+								name:userName,
+								pwd:userPwd
+							}, 
+			function(data){
+				if(data.flag==='no'){
+					$('#errMsg').text(data.msg);
+				}
+				else{
+					//跳转页面,完成zhuce
+					 window.location.href='/login';
+				}
+			})
+		})
+		
+		
+	})
+	
+</script>
+</body>
+</html>
